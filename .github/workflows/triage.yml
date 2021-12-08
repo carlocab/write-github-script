@@ -30,14 +30,10 @@ jobs:
             core.setOutput('long-pr-count', totalCount)
 
   remove_long_timeout_labels:
-    if: ${{ fromJson(needs.count_long_timeout_labels.outputs.long-pr-count) >= 2 }}
+    if: ${{ (github.event_name == 'pull_request') && (github.repository == 'carlocab/write-github-script') && (fromJson(needs.count_long_timeout_labels.outputs.long-pr-count) >= 10) }}
     needs: count_long_timeout_labels
     runs-on: ubuntu-latest
     steps:
-      - name: Log some GitHub variables
-        run: |
-          echo ${{ github.event_name }}
-          echo ${{ github.repository }}
       - name: Remove `CI-long-timeout` label
         uses: Homebrew/actions/label-pull-requests@master
         with:
