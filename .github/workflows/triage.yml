@@ -9,6 +9,7 @@ jobs:
       long-pr-count: ${{ steps.count.outputs.count }}
     steps:
       - name: Count pull requests with the `CI-long-timeout` label
+        if: contains(github.event.issue.labels.*.name, 'bug')
         id: count_long_timeout_prs
         uses: actions/github-script@v5
         with:
@@ -32,6 +33,7 @@ jobs:
             if (totalCount > 2) {
               core.setFailed(`Too many pull requests (${totalCount}) with the long-timeout label!`)
             }
+
       - name: Remove `CI-long-timeout` label if applicable
         if: fromJson(steps.count_long_timeout_prs.outputs.count) >= 2
         uses: Homebrew/actions/label-pull-requests@master
