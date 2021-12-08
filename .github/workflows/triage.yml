@@ -6,10 +6,10 @@ jobs:
   count_timeout_labels:
     runs-on: ubuntu-latest
     outputs:
-      long-pr-count: ${{ steps.long-pr-count.outputs.long-pr-count }}
+      long-pr-count: ${{ steps.count.outputs.count }}
     steps:
       - name: Count pull requests with the `CI-long-timeout` label
-        id: long-pr-count
+        id: count
         uses: actions/github-script@v3
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -27,7 +27,7 @@ jobs:
               label: 'bug'
             }
             const { repository: { issues: { totalCount } } }  = await github.graphql(query, variables)
-            core.setOutput('long-pr-count', totalCount)
+            core.setOutput('count', totalCount)
 
   remove_timeout_labels:
     if: ${{ (github.event_name == 'pull_request') && (github.repository == 'carlocab/write-github-script') && (fromJson(needs.count_timeout_labels.outputs.long-pr-count) >= 2) }}
