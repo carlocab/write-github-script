@@ -1,0 +1,43 @@
+name: Triage tasks
+
+on: pull_request_target
+
+jobs:
+  count_long_timeout_labels:
+    runs-on: ubuntu-latest
+    outputs:
+      long-pr-count: ${{ steps.long-pr-count.outputs.long-pr-count }}
+    steps:
+      - name: Count pull requests with the `CI-long-timeout` label
+        id: long-pr-count
+        uses: actions/github-script@v3
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const query = `query($owner:String!, $name:String!, $label:String!) {
+              repository(owner:$owner, name:$name) {
+                issues(last:100, states:OPEN, labels: [$label]) {
+                  totalCount
+                }
+              }
+            }`;
+            const variables = {
+              owner: context.repo.owner,
+              name: context.repo.repo,
+              label: 'bug'
+            }
+            const { repository: { pullRequests: { totalCount } } }  = await github.graphql(query, variables)
+            core.setOutput('long-pr-count', totalCount)
+
+  remove_long_timeout_labels:
+    if: ${{ fromJson(needs.count_long_timeout_labels.outputs.long-pr-count) }} >= 2
+    needs: count_long_timeout_labels
+    runs-on: ubuntu-latest
+    steps:
+      - name: Remove `CI-long-timeout` label
+        uses: Homebrew/actions/label-pull-requests@master
+        with:
+          token: ${{secrets.GITHUB_TOKEN}}
+          def: |
+            - label: bug
+              path: nonexistent/path/hack
