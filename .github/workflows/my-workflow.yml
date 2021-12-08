@@ -24,7 +24,7 @@ jobs:
               label: 'CI-long-timeout'
             }
             const { repository: { pullRequests: { totalCount } } }  = await github.graphql(query, variables)
-            console.log(totalCount)
+            console.log(typeof totalCount)
 
             github.issues.createComment({
               issue_number: 10,
