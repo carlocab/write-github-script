@@ -33,7 +33,7 @@ jobs:
     if: |
       github.event_name == 'pull_request' &&
       github.repository == 'carlocab/write-github-script' &&
-      ${{ fromJson(needs.count_long_timeout_labels.outputs.long-pr-count) >= 2 }}
+      ${{ fromJson(needs.count_long_timeout_labels.outputs.long-pr-count) >= 10 }}
     needs: count_long_timeout_labels
     runs-on: ubuntu-latest
     steps:
