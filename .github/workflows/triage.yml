@@ -9,7 +9,7 @@ jobs:
       long-pr-count: ${{ steps.count.outputs.count }}
     steps:
       - name: Count pull requests with the `CI-long-timeout` label
-        if: contains(github.event.issue.labels.*.name, 'bug')
+        if: contains(github.event.pull_request.labels.*.name, 'bug')
         id: count_long_timeout_prs
         uses: actions/github-script@v5
         with:
