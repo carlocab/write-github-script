@@ -3,7 +3,7 @@ name: Triage tasks
 on: pull_request
 
 jobs:
-  count_timeout_labels:
+  timeout_labels:
     runs-on: ubuntu-latest
     outputs:
       long-pr-count: ${{ steps.count.outputs.count }}
@@ -28,17 +28,12 @@ jobs:
             }
             const { repository: { issues: { totalCount } } }  = await github.graphql(query, variables)
             core.setOutput('count', totalCount)
-
-  remove_timeout_labels:
-    if: |
-      (github.event_name == 'pull_request') &&
-      (github.repository == 'carlocab/write-github-script') &&
-      (fromJson(needs.count_timeout_labels.outputs.long-pr-count) >= 2)
-    needs: count_timeout_labels
-    runs-on: ubuntu-latest
-    steps:
-      - name: Remove `CI-long-timeout` label
-        uses: Homebrew/actions/label-pull-requests@master
+      - name: Remove `CI-long-timeout` label if applicable
+        if: |
+          (github.event_name == 'pull_request') &&
+          (github.repository == 'carlocab/write-github-script') &&
+          (fromJson(steps.count.outputs.count) >= 2)
+        uses: Homebrew/actions/label-pull-request@master
         with:
           token: ${{secrets.GITHUB_TOKEN}}
           def: |
