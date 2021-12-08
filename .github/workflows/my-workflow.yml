@@ -27,10 +27,3 @@ jobs:
             }
             const result = await github.graphql(query, variables)
             console.log(result)
-
-            github.issues.createComment({
-              issue_number: 10,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: result
-            })
