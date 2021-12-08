@@ -10,7 +10,7 @@ jobs:
     steps:
       - name: Count pull requests with the `CI-long-timeout` label
         id: count
-        uses: actions/github-script@v3
+        uses: actions/github-script@v5
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
