@@ -19,8 +19,8 @@ jobs:
               }
             }`;
             const variables = {
-              owner: context.repo.owner,
-              name: context.repo.repo,
+              owner: 'Homebrew',
+              name: 'homebrew-core',
               label: 'bug'
             }
             const result = await github.graphql(query, variables)
