@@ -30,8 +30,11 @@ jobs:
             const { repository: { issues: { totalCount } } }  = await github.graphql(query, variables)
             core.setOutput('count', totalCount)
 
-            if (totalCount > 2) {
+            const maxCount = 2
+            if (totalCount > maxCount) {
               core.setFailed(`Too many pull requests (${totalCount}) with the long-timeout label!`)
+              core.error(`Only ${maxCount} pull requests at a time can use this label.`)
+              core.error('Remove the long-timeout label from this or other PRs, once their CI has completed.')
             }
 
       - name: Remove `CI-long-timeout` label if applicable
