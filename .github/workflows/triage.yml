@@ -35,12 +35,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Log some GitHub variables
-        uses: actions/github-script@v3
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            console.log(${{ github.event_name }})
-            console.log(${{ github.repository }})
+        run: |
+          echo ${{ github.event_name }}
+          echo ${{ github.repository }}
       - name: Remove `CI-long-timeout` label
         uses: Homebrew/actions/label-pull-requests@master
         with:
