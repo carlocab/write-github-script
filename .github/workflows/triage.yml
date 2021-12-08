@@ -28,6 +28,10 @@ jobs:
             }
             const { repository: { issues: { totalCount } } }  = await github.graphql(query, variables)
             core.setOutput('count', totalCount)
+
+            if (totalCount > 2) {
+              throw 'Too many bugs!'
+            }
       - name: Remove `CI-long-timeout` label if applicable
         if: fromJson(steps.count_long_timeout_prs.outputs.count) >= 2
         uses: Homebrew/actions/label-pull-requests@master
