@@ -43,7 +43,7 @@ jobs:
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
-            const query = `query($owner:String!, $name:String!, $label:String!) {
+            const query = `query {
               repository(owner:$owner, name:$name) {
                 pullRequests(last:100, labels: [$label]) {
                   totalCount
