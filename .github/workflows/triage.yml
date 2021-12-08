@@ -29,10 +29,7 @@ jobs:
             const { repository: { issues: { totalCount } } }  = await github.graphql(query, variables)
             core.setOutput('count', totalCount)
       - name: Remove `CI-long-timeout` label if applicable
-        if: |
-          (github.event_name == 'pull_request') &&
-          (github.repository == 'carlocab/write-github-script') &&
-          (fromJson(steps.count.outputs.count) >= 2)
+        if: fromJson(steps.count.outputs.count) >= 2
         uses: Homebrew/actions/label-pull-requests@master
         with:
           token: ${{secrets.GITHUB_TOKEN}}
