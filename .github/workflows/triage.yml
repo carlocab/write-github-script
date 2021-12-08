@@ -29,8 +29,8 @@ jobs:
             const { repository: { issues: { totalCount } } }  = await github.graphql(query, variables)
             core.setOutput('count', totalCount)
 
-            if (totalCount > 10) {
-              throw 'Too many bugs!'
+            if (totalCount > 2) {
+              core.setFailed('Too many bugs!')
             }
       - name: Remove `CI-long-timeout` label if applicable
         if: fromJson(steps.count_long_timeout_prs.outputs.count) >= 2
