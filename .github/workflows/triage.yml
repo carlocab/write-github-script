@@ -26,7 +26,7 @@ jobs:
               name: context.repo.repo,
               label: 'bug'
             }
-            const { repository: { pullRequests: { totalCount } } }  = await github.graphql(query, variables)
+            const { repository: { issues: { totalCount } } }  = await github.graphql(query, variables)
             core.setOutput('long-pr-count', totalCount)
 
   remove_long_timeout_labels:
