@@ -30,7 +30,10 @@ jobs:
             core.setOutput('count', totalCount)
 
   remove_timeout_labels:
-    if: ${{ (github.event_name == 'pull_request') && (github.repository == 'carlocab/write-github-script') && (fromJson(needs.count_timeout_labels.outputs.long-pr-count) >= 2) }}
+    if: |
+      (github.event_name == 'pull_request') &&
+      (github.repository == 'carlocab/write-github-script') &&
+      (fromJson(needs.count_timeout_labels.outputs.long-pr-count) >= 2)
     needs: count_timeout_labels
     runs-on: ubuntu-latest
     steps:
