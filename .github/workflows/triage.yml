@@ -33,7 +33,7 @@ jobs:
           (github.event_name == 'pull_request') &&
           (github.repository == 'carlocab/write-github-script') &&
           (fromJson(steps.count.outputs.count) >= 2)
-        uses: Homebrew/actions/label-pull-request@master
+        uses: Homebrew/actions/label-pull-requests@master
         with:
           token: ${{secrets.GITHUB_TOKEN}}
           def: |
