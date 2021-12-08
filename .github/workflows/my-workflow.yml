@@ -36,3 +36,29 @@ jobs:
             content_id: context.payload.issue.id,
             content_type: "Issue"
             });
+
+      - name: Count pull requests with "CI-long-timeout" label
+        if: contains(github.event.issue.labels.*.name, 'bug')
+        uses: actions/github-script@v3
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            const query = `query($owner:String!, $name:String!, $label:String!) {
+              repository(owner:$owner, name:$name) {
+                pullRequests(last:100, labels: [$label]) {
+                  totalCount
+                }
+              }
+            }`;
+            const variables = {
+              owner: 'Homebrew',
+              name: 'homebrew-core',
+              label: 'CI-long-timeout',
+            }
+            const result = await github.graphql(query, variables)
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: result
+            })
