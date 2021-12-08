@@ -30,7 +30,7 @@ jobs:
             core.setOutput('count', totalCount)
 
             if (totalCount > 2) {
-              core.setFailed('Too many bugs!')
+              core.error('Too many bugs!')
             }
       - name: Remove `CI-long-timeout` label if applicable
         if: fromJson(steps.count_long_timeout_prs.outputs.count) >= 2
