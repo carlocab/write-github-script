@@ -23,10 +23,9 @@ jobs:
               name: 'homebrew-core',
               label: 'CI-long-timeout'
             }
-            const result = await github.graphql(query, variables)
-            console.log(result)
+            const { repository: { pullRequests: { totalCount } } }  = await github.graphql(query, variables)
+            console.log(totalCount)
 
-            const { repository: { pullRequests: { totalCount } } } = result
             github.issues.createComment({
               issue_number: 10,
               owner: context.repo.owner,
