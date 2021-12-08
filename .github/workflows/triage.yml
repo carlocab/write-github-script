@@ -30,7 +30,7 @@ jobs:
             core.setOutput('long-pr-count', totalCount)
 
   remove_long_timeout_labels:
-    if: ${{ fromJson(needs.count_long_timeout_labels.outputs.long-pr-count) >= 10 }}
+    if: ${{ fromJson(needs.count_long_timeout_labels.outputs.long-pr-count) >= 2 }}
     needs: count_long_timeout_labels
     runs-on: ubuntu-latest
     steps:
