@@ -1,12 +1,9 @@
 name: Learning GitHub Script
 
-on:
-  issues:
-    types: [opened]
-  workflow_dispatch:
+on: workflow_dispatch
 
 jobs:
-  comment:
+  list-issues:
     runs-on: ubuntu-latest
     steps:
       - name: Count pull requests with "CI-long-timeout" label
@@ -14,19 +11,23 @@ jobs:
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
-            const query = `query($owner:String!, $name:String!, $label:String!){
+            const query = `query($owner:String!, $name:String!, $label:String!) {
               repository(owner:$owner, name:$name){
-                pullRequests(last:100, labels: [$label]){
-                  totalCount
+                issues(first:100, labels: [$label]) {
+                  nodes {
+                    id
+                  }
                 }
               }
             }`;
             const variables = {
-              owner: 'Homebrew',
-              name: 'homebrew-core',
-              label: 'CI-long-timeout',
+              owner: context.repo.owner,
+              name: context.repo.repo,
+              label: 'bug'
             }
             const result = await github.graphql(query, variables)
+            console.log(result)
+
             github.issues.createComment({
               issue_number: 10,
               owner: context.repo.owner,
