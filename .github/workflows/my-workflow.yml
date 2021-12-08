@@ -12,7 +12,7 @@ jobs:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
             const query = `query($owner:String!, $name:String!, $label:String!) {
-              repository(owner:$owner, name:$name){
+              repository(owner:$owner, name:$name) {
                 pullRequests(last:100, states:OPEN, labels: [$label]) {
                   totalCount
                 }
