@@ -13,7 +13,7 @@ jobs:
           script: |
             const query = `query($owner:String!, $name:String!, $label:String!) {
               repository(owner:$owner,, name:$name){
-                issues(first:100, states:OPEN, labels: [$label]) {
+                pullRequests(last:100, states:OPEN, labels: [$label]) {
                   totalCount
                 }
               }
@@ -21,7 +21,7 @@ jobs:
             const variables = {
               owner: 'Homebrew',
               name: 'homebrew-core',
-              label: 'bug'
+              label: 'CI-long-timeout'
             }
             const result = await github.graphql(query, variables)
             console.log(result)
